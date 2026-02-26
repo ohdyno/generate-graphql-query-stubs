@@ -2,23 +2,22 @@
 
 A small utility that turns a GraphQL query file into realistic mock data — useful for testing, prototyping, or building UI without a live API.
 
-The pipeline has two steps:
+The pipeline has two subcommands:
 
-1. **`cmd/generate-schema`** — parses a `.graphql` query and emits a JSON Schema describing the response shape, inferring scalar types from field names.
-2. **`cmd/generate-stub`** — takes a JSON Schema and generates a stub object filled with plausible values.
+1. **`schema`** — parses a `.graphql` query and emits a JSON Schema describing the response shape, inferring scalar types from field names.
+2. **`stub`** — takes a JSON Schema and generates a stub object filled with plausible values.
 
-The two binaries are designed to be piped together.
+The two subcommands are designed to be piped together.
 
 ## Install
 
 ```sh
-go install github.com/ohdyno/generate-graphql-query-stubs/cmd/generate-schema@latest
-go install github.com/ohdyno/generate-graphql-query-stubs/cmd/generate-stub@latest
+go install github.com/ohdyno/generate-graphql-query-stubs/cmd/generate-graphql-query-stubs@latest
 ```
 
-This places `generate-schema` and `generate-stub` in `$GOPATH/bin`.
+This places `generate-graphql-query-stubs` in `$GOPATH/bin`.
 
-## Prerequisites
+## Prerequisites (for development)
 
 - [mise](https://mise.jdx.dev/) with `go` configured (see `mise.toml`)
 
@@ -31,19 +30,19 @@ mise exec -- go mod download
 ## Generate a JSON Schema from a GraphQL query
 
 ```sh
-mise exec -- go run ./cmd/generate-schema query.graphql
+mise exec -- go run ./cmd/generate-graphql-query-stubs schema query.graphql
 ```
 
 Or pipe a query via stdin:
 
 ```sh
-cat query.graphql | mise exec -- go run ./cmd/generate-schema
+cat query.graphql | mise exec -- go run ./cmd/generate-graphql-query-stubs schema
 ```
 
 Pass an overrides file to force specific field types:
 
 ```sh
-mise exec -- go run ./cmd/generate-schema query.graphql --overrides overrides.json
+mise exec -- go run ./cmd/generate-graphql-query-stubs schema query.graphql --overrides overrides.json
 ```
 
 Overrides file format (dot-path keys):
@@ -55,19 +54,19 @@ Overrides file format (dot-path keys):
 }
 ```
 
-## Generate mock data from a JSON Schema
+## Generate a stub from a JSON Schema
 
 ```sh
-mise exec -- go run ./cmd/generate-stub schema.json
+mise exec -- go run ./cmd/generate-graphql-query-stubs stub schema.json
 ```
 
-Or pipe directly from the schema generator:
+Or pipe directly from the schema subcommand:
 
 ```sh
-mise exec -- go run ./cmd/generate-schema query.graphql | mise exec -- go run ./cmd/generate-stub
+mise exec -- go run ./cmd/generate-graphql-query-stubs schema query.graphql | mise exec -- go run ./cmd/generate-graphql-query-stubs stub
 ```
 
-## Build binaries
+## Build binary
 
 ```sh
 mise exec -- go build ./cmd/...
