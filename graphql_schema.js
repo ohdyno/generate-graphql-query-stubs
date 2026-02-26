@@ -1,11 +1,11 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 /**
  * Parses a GraphQL query file and outputs a JSON Schema of the response shape.
  * Uses the `graphql` package for AST parsing; infers scalar types from field names.
  *
  * Usage:
- *   node graphql_schema.js <query_file.graphql>
- *   node graphql_schema.js <query_file.graphql> --overrides <overrides.json>
+ *   bun graphql_schema.js <query_file.graphql>
+ *   bun graphql_schema.js <query_file.graphql> --overrides <overrides.json>
  *
  * Overrides file format (dot-path keys map to JSON Schema type strings):
  *   {
@@ -102,7 +102,7 @@ if (require.main === module) {
   const args = process.argv.slice(2);
   const queryFile = args[0];
   if (!queryFile) {
-    console.error("Usage: node graphql_schema.js <query_file.graphql> [--overrides <overrides.json>]");
+    console.error("Usage: bun graphql_schema.js <query_file.graphql> [--overrides <overrides.json>]");
     process.exit(1);
   }
 

@@ -1,4 +1,4 @@
-const { describe, it } = require("node:test");
+const { describe, it } = require("bun:test");
 const assert = require("node:assert/strict");
 const { buildSchema, inferType, isListField } = require("./graphql_schema");
 

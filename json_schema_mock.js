@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 /**
  * Takes a JSON Schema (from a file or stdin) and returns an object
  * filled with mock values matching the schema.

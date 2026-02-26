@@ -4,7 +4,7 @@
   "description": "",
   "main": "graphql_schema.js",
   "scripts": {
-    "test": "node --test"
+    "test": "bun test"
   },
   "keywords": [],
   "author": "",
