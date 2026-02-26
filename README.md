@@ -1,5 +1,7 @@
 # GraphQL Query Stub Generator
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A small utility that turns a GraphQL query file into realistic stub data — useful for testing, prototyping, or building UI without a live API.
 
 The pipeline has two subcommands:
