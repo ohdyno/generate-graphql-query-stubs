@@ -6,6 +6,7 @@
  * Usage:
  *   bun graphql_schema.js <query_file.graphql>
  *   bun graphql_schema.js <query_file.graphql> --overrides <overrides.json>
+ *   cat query.graphql | bun graphql_schema.js
  *
  * Overrides file format (dot-path keys map to JSON Schema type strings):
  *   {
@@ -100,18 +101,24 @@ module.exports = { buildSchema };
 
 if (require.main === module) {
   const args = process.argv.slice(2);
-  const queryFile = args[0];
-  if (!queryFile) {
-    console.error("Usage: bun graphql_schema.js <query_file.graphql> [--overrides <overrides.json>]");
-    process.exit(1);
-  }
-
   const overridesIdx = args.indexOf("--overrides");
   const overrides = overridesIdx !== -1
     ? JSON.parse(fs.readFileSync(path.resolve(args[overridesIdx + 1]), "utf8"))
     : {};
 
-  const query = fs.readFileSync(path.resolve(queryFile), "utf8");
-  const schema = buildSchema(query, overrides);
-  console.log(JSON.stringify(schema, null, 2));
+  const queryFile = args[0] && !args[0].startsWith("--") ? args[0] : null;
+
+  function run(query) {
+    const schema = buildSchema(query, overrides);
+    console.log(JSON.stringify(schema, null, 2));
+  }
+
+  if (queryFile) {
+    run(fs.readFileSync(path.resolve(queryFile), "utf8"));
+  } else {
+    let input = "";
+    process.stdin.setEncoding("utf8");
+    process.stdin.on("data", (chunk) => (input += chunk));
+    process.stdin.on("end", () => run(input));
+  }
 }

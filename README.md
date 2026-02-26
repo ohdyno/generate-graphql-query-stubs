@@ -25,6 +25,12 @@ mise exec -- bun install
 mise exec -- bun src/graphql_schema.js tests/fixtures/pokemon_stats.graphql
 ```
 
+Or pipe a query via stdin:
+
+```sh
+cat tests/fixtures/pokemon_stats.graphql | mise exec -- bun src/graphql_schema.js
+```
+
 Pass an overrides file to force specific field types:
 
 ```sh
