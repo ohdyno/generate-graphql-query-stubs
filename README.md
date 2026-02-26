@@ -9,6 +9,15 @@ The pipeline has two steps:
 
 The two binaries are designed to be piped together.
 
+## Install
+
+```sh
+go install github.com/ohdyno/generate-graphql-query-stubs/cmd/generate-schema@latest
+go install github.com/ohdyno/generate-graphql-query-stubs/cmd/generate-stub@latest
+```
+
+This places `generate-schema` and `generate-stub` in `$GOPATH/bin`.
+
 ## Prerequisites
 
 - [mise](https://mise.jdx.dev/) with `go` configured (see `mise.toml`)
