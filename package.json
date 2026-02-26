@@ -1,5 +1,5 @@
 {
-  "name": "exploring-agents",
+  "name": "generate-graphql-query-stubs",
   "version": "1.0.0",
   "description": "",
   "main": "src/graphql_schema.js",
