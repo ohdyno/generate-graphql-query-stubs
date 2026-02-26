@@ -97,7 +97,7 @@ function run(input) {
   console.log(JSON.stringify(result, null, 2));
 }
 
-module.exports = { generate, generateString, generateInteger, generateNumber, generateArray, generateObject };
+module.exports = { generate };
 
 if (require.main === module) {
   if (process.argv[2]) {
