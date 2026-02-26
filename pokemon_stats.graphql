@@ -1,0 +1,26 @@
+query GetPokemonStats($name: String!) {
+  pokemon_v2_pokemon(where: { name: { _eq: $name } }) {
+    name
+    base_experience
+    height
+    weight
+    pokemon_v2_pokemonstats {
+      base_stat
+      effort
+      pokemon_v2_stat {
+        name
+      }
+    }
+    pokemon_v2_pokemontypes {
+      pokemon_v2_type {
+        name
+      }
+    }
+    pokemon_v2_pokemonabilities {
+      pokemon_v2_ability {
+        name
+      }
+      is_hidden
+    }
+  }
+}
