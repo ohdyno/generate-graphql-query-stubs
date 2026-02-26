@@ -97,12 +97,16 @@ function run(input) {
   console.log(JSON.stringify(result, null, 2));
 }
 
-if (process.argv[2]) {
-  run(fs.readFileSync(process.argv[2], "utf8"));
-} else {
-  // Read from stdin (e.g. piped from graphql_schema.js)
-  let input = "";
-  process.stdin.setEncoding("utf8");
-  process.stdin.on("data", (chunk) => (input += chunk));
-  process.stdin.on("end", () => run(input));
+module.exports = { generate, generateString, generateInteger, generateNumber, generateArray, generateObject };
+
+if (require.main === module) {
+  if (process.argv[2]) {
+    run(fs.readFileSync(process.argv[2], "utf8"));
+  } else {
+    // Read from stdin (e.g. piped from graphql_schema.js)
+    let input = "";
+    process.stdin.setEncoding("utf8");
+    process.stdin.on("data", (chunk) => (input += chunk));
+    process.stdin.on("end", () => run(input));
+  }
 }
