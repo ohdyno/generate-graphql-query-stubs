@@ -68,15 +68,15 @@ func selectionSetToSchema(selectionSet ast.SelectionSet, overrides map[string]st
 }
 
 // BuildSchema parses a GraphQL query string and returns a JSON Schema as a nested map.
-// overrides maps dot-path field paths to JSON Schema type strings.
+// The overrides parameter maps dot-path field paths to JSON Schema type strings.
 func BuildSchema(querySource string, overrides map[string]string) (map[string]any, error) {
 	if overrides == nil {
 		overrides = map[string]string{}
 	}
 
-	doc, parseErr := parser.ParseQuery(&ast.Source{Input: querySource})
-	if parseErr != nil {
-		return nil, parseErr
+	doc, err := parser.ParseQuery(&ast.Source{Input: querySource})
+	if err != nil {
+		return nil, err
 	}
 
 	if len(doc.Operations) == 0 {

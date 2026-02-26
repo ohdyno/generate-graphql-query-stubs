@@ -1,6 +1,6 @@
 # GraphQL Query Stub Generator
 
-A small utility that turns a GraphQL query file into realistic mock data — useful for testing, prototyping, or building UI without a live API.
+A small utility that turns a GraphQL query file into realistic stub data — useful for testing, prototyping, or building UI without a live API.
 
 The pipeline has two subcommands:
 
