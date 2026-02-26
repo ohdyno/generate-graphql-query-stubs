@@ -4,37 +4,37 @@ A small utility that turns a GraphQL query file into realistic mock data — use
 
 The pipeline has two steps:
 
-1. **`graphql_schema.js`** — parses a `.graphql` query and emits a JSON Schema describing the response shape, inferring scalar types from field names.
-2. **`json_schema_mock.js`** — takes a JSON Schema and generates a mock object filled with plausible values.
+1. **`cmd/graphql-schema`** — parses a `.graphql` query and emits a JSON Schema describing the response shape, inferring scalar types from field names.
+2. **`cmd/json-schema-mock`** — takes a JSON Schema and generates a mock object filled with plausible values.
 
-The two scripts are designed to be piped together.
+The two binaries are designed to be piped together.
 
 ## Prerequisites
 
-- [mise](https://mise.jdx.dev/) with `bun` configured (see `mise.toml`)
+- [mise](https://mise.jdx.dev/) with `go` configured (see `mise.toml`)
 
 ## Install dependencies
 
 ```sh
-mise exec -- bun install
+mise exec -- go mod download
 ```
 
 ## Generate a JSON Schema from a GraphQL query
 
 ```sh
-mise exec -- bun src/graphql_schema.js tests/fixtures/pokemon_stats.graphql
+mise exec -- go run ./cmd/graphql-schema tests/fixtures/pokemon_stats.graphql
 ```
 
 Or pipe a query via stdin:
 
 ```sh
-cat tests/fixtures/pokemon_stats.graphql | mise exec -- bun src/graphql_schema.js
+cat tests/fixtures/pokemon_stats.graphql | mise exec -- go run ./cmd/graphql-schema
 ```
 
 Pass an overrides file to force specific field types:
 
 ```sh
-mise exec -- bun src/graphql_schema.js query.graphql --overrides overrides.json
+mise exec -- go run ./cmd/graphql-schema query.graphql --overrides overrides.json
 ```
 
 Overrides file format (dot-path keys):
@@ -49,23 +49,29 @@ Overrides file format (dot-path keys):
 ## Generate mock data from a JSON Schema
 
 ```sh
-mise exec -- bun src/json_schema_mock.js schema.json
+mise exec -- go run ./cmd/json-schema-mock schema.json
 ```
 
 Or pipe directly from the schema generator:
 
 ```sh
-mise exec -- bun src/graphql_schema.js query.graphql | mise exec -- bun src/json_schema_mock.js
+mise exec -- go run ./cmd/graphql-schema query.graphql | mise exec -- go run ./cmd/json-schema-mock
+```
+
+## Build binaries
+
+```sh
+mise exec -- go build ./cmd/...
 ```
 
 ## Run tests
 
 ```sh
-mise exec -- bun test
+mise exec -- go test ./...
 ```
 
 ## Contributing
 
-**Running commands:** Always invoke bun via `mise exec -- bun <args>` to ensure the correct bun version is used. Never call `bun` directly.
+**Running commands:** Always invoke go via `mise exec -- go <args>` to ensure the correct Go version is used. Never call `go` directly.
 
 **Commit messages:** Follow [conventional commits](https://www.conventionalcommits.org/) style. Include the *why* or overall goal of the change in the message body — skip details that are already visible in the diff.
