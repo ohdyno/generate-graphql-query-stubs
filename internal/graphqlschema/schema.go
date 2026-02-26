@@ -1,7 +1,7 @@
 package graphqlschema
 
 import (
-	"fmt"
+	"errors"
 	"regexp"
 
 	"github.com/vektah/gqlparser/v2/ast"
@@ -76,11 +76,11 @@ func BuildSchema(querySource string, overrides map[string]string) (map[string]an
 
 	doc, parseErr := parser.ParseQuery(&ast.Source{Input: querySource})
 	if parseErr != nil {
-		return nil, fmt.Errorf("%s", parseErr.Error())
+		return nil, parseErr
 	}
 
 	if len(doc.Operations) == 0 {
-		return nil, fmt.Errorf("No operation definition found in query.")
+		return nil, errors.New("no operation definition found in query")
 	}
 
 	operation := doc.Operations[0]

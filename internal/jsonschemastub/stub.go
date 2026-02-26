@@ -106,7 +106,7 @@ func generateObject(schema map[string]any) map[string]any {
 	return result
 }
 
-// Generate produces a mock value matching the given JSON Schema.
+// Generate produces a stub value matching the given JSON Schema.
 func Generate(schema map[string]any) any {
 	if schema == nil {
 		return nil

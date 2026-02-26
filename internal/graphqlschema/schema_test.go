@@ -39,7 +39,7 @@ func TestBuildSchema(t *testing.T) {
 		if err == nil {
 			t.Fatal("expected error, got nil")
 		}
-		if !regexp.MustCompile(`No operation definition found`).MatchString(err.Error()) {
+		if !regexp.MustCompile(`no operation definition found`).MatchString(err.Error()) {
 			t.Errorf("unexpected error message: %v", err)
 		}
 	})
