@@ -1,5 +1,4 @@
-const { describe, it } = require("bun:test");
-const assert = require("node:assert/strict");
+const { describe, it, expect } = require("bun:test");
 const { buildSchema, inferType, isListField } = require("../src/graphql_schema");
 
 // ---------------------------------------------------------------------------
@@ -8,33 +7,33 @@ const { buildSchema, inferType, isListField } = require("../src/graphql_schema")
 
 describe("inferType", () => {
   it("returns 'boolean' for is_ prefix", () => {
-    assert.equal(inferType("is_hidden"), "boolean");
-    assert.equal(inferType("is_active"), "boolean");
+    expect(inferType("is_hidden")).toBe("boolean");
+    expect(inferType("is_active")).toBe("boolean");
   });
 
   it("returns 'boolean' for has_ prefix", () => {
-    assert.equal(inferType("has_ability"), "boolean");
+    expect(inferType("has_ability")).toBe("boolean");
   });
 
   it("returns 'number' for float-like field names", () => {
-    assert.equal(inferType("success_rate"), "number");
-    assert.equal(inferType("damage_ratio"), "number");
+    expect(inferType("success_rate")).toBe("number");
+    expect(inferType("damage_ratio")).toBe("number");
   });
 
   it("returns 'integer' for numeric field names", () => {
-    assert.equal(inferType("base_stat"), "integer");
-    assert.equal(inferType("effort"), "integer");
-    assert.equal(inferType("base_experience"), "integer");
-    assert.equal(inferType("height"), "integer");
-    assert.equal(inferType("weight"), "integer");
-    assert.equal(inferType("id"), "integer");
-    assert.equal(inferType("user_id"), "integer");
+    expect(inferType("base_stat")).toBe("integer");
+    expect(inferType("effort")).toBe("integer");
+    expect(inferType("base_experience")).toBe("integer");
+    expect(inferType("height")).toBe("integer");
+    expect(inferType("weight")).toBe("integer");
+    expect(inferType("id")).toBe("integer");
+    expect(inferType("user_id")).toBe("integer");
   });
 
   it("returns 'string' for unrecognised field names", () => {
-    assert.equal(inferType("name"), "string");
-    assert.equal(inferType("description"), "string");
-    assert.equal(inferType("slug"), "string");
+    expect(inferType("name")).toBe("string");
+    expect(inferType("description")).toBe("string");
+    expect(inferType("slug")).toBe("string");
   });
 });
 
@@ -44,18 +43,18 @@ describe("inferType", () => {
 
 describe("isListField", () => {
   it("returns true for plural-suffixed field names", () => {
-    assert.equal(isListField("pokemon_v2_pokemonstats"), true);
-    assert.equal(isListField("pokemon_v2_pokemontypes"), true);
-    assert.equal(isListField("pokemon_v2_pokemonabilities"), true);
-    assert.equal(isListField("moves"), true);
-    assert.equal(isListField("edges"), true);
-    assert.equal(isListField("nodes"), true);
+    expect(isListField("pokemon_v2_pokemonstats")).toBe(true);
+    expect(isListField("pokemon_v2_pokemontypes")).toBe(true);
+    expect(isListField("pokemon_v2_pokemonabilities")).toBe(true);
+    expect(isListField("moves")).toBe(true);
+    expect(isListField("edges")).toBe(true);
+    expect(isListField("nodes")).toBe(true);
   });
 
   it("returns false for singular field names", () => {
-    assert.equal(isListField("pokemon_v2_stat"), false);
-    assert.equal(isListField("pokemon_v2_type"), false);
-    assert.equal(isListField("name"), false);
+    expect(isListField("pokemon_v2_stat")).toBe(false);
+    expect(isListField("pokemon_v2_type")).toBe(false);
+    expect(isListField("name")).toBe(false);
   });
 });
 
@@ -75,25 +74,22 @@ describe("buildSchema", () => {
 
   it("wraps output in a JSON Schema envelope", () => {
     const schema = buildSchema(SIMPLE_QUERY);
-    assert.equal(schema.$schema, "http://json-schema.org/draft-07/schema#");
-    assert.equal(schema.type, "object");
-    assert.ok(schema.properties.data);
+    expect(schema.$schema).toBe("http://json-schema.org/draft-07/schema#");
+    expect(schema.type).toBe("object");
+    expect(schema.properties.data).toBeTruthy();
   });
 
   it("produces object properties for nested fields", () => {
     const schema = buildSchema(SIMPLE_QUERY);
     const pokemon = schema.properties.data.properties.pokemon;
-    assert.equal(pokemon.type, "object");
-    assert.equal(pokemon.properties.name.type, "string");
-    assert.equal(pokemon.properties.weight.type, "integer");
+    expect(pokemon.type).toBe("object");
+    expect(pokemon.properties.name.type).toBe("string");
+    expect(pokemon.properties.weight.type).toBe("integer");
   });
 
   it("throws when the query has no operation definition", () => {
     // A fragment-only document parses successfully but has no OperationDefinition
-    assert.throws(
-      () => buildSchema("fragment Foo on Bar { name }"),
-      /No operation definition found/
-    );
+    expect(() => buildSchema("fragment Foo on Bar { name }")).toThrow(/No operation definition found/);
   });
 
   // -------------------------------------------------------------------------
@@ -113,11 +109,11 @@ describe("buildSchema", () => {
     `;
     const schema = buildSchema(query);
     const pokemons = schema.properties.data.properties.pokemons;
-    assert.equal(pokemons.type, "array");
+    expect(pokemons.type).toBe("array");
 
     const stats = pokemons.items.properties.pokemon_v2_pokemonstats;
-    assert.equal(stats.type, "array");
-    assert.equal(stats.items.properties.base_stat.type, "integer");
+    expect(stats.type).toBe("array");
+    expect(stats.items.properties.base_stat.type).toBe("integer");
   });
 
   it("treats non-plural fields as objects, not arrays", () => {
@@ -131,8 +127,8 @@ describe("buildSchema", () => {
     `;
     const schema = buildSchema(query);
     const pokemon = schema.properties.data.properties.pokemon_v2_pokemon;
-    assert.equal(pokemon.type, "object");
-    assert.equal(pokemon.properties.name.type, "string");
+    expect(pokemon.type).toBe("object");
+    expect(pokemon.properties.name.type).toBe("string");
   });
 
   // -------------------------------------------------------------------------
@@ -155,8 +151,8 @@ describe("buildSchema", () => {
     };
     const schema = buildSchema(query, overrides);
     const props = schema.properties.data.properties.pokemons.items.properties;
-    assert.equal(props.name.type, "string");
-    assert.equal(props.base_experience.type, "integer");
+    expect(props.name.type).toBe("string");
+    expect(props.base_experience.type).toBe("integer");
   });
 
   it("applies overrides to leaf field types on object fields", () => {
@@ -174,8 +170,8 @@ describe("buildSchema", () => {
     };
     const schema = buildSchema(query, overrides);
     const props = schema.properties.data.properties.pokemon_v2_pokemon.properties;
-    assert.equal(props.name.type, "string");
-    assert.equal(props.base_experience.type, "integer");
+    expect(props.name.type).toBe("string");
+    expect(props.base_experience.type).toBe("integer");
   });
 
   it("override takes precedence over inferred type", () => {
@@ -189,7 +185,7 @@ describe("buildSchema", () => {
     // is_hidden would normally infer as boolean; override to string
     const overrides = { "data.thing.is_hidden": "string" };
     const schema = buildSchema(query, overrides);
-    assert.equal(schema.properties.data.properties.thing.properties.is_hidden.type, "string");
+    expect(schema.properties.data.properties.thing.properties.is_hidden.type).toBe("string");
   });
 
   it("falls back to inferred type when field is not in overrides", () => {
@@ -205,7 +201,7 @@ describe("buildSchema", () => {
     const schema = buildSchema(query, overrides);
     const props = schema.properties.data.properties.thing.properties;
     // name not in overrides — should fall back to inferred "string"
-    assert.equal(props.name.type, "string");
+    expect(props.name.type).toBe("string");
   });
 
   // -------------------------------------------------------------------------
@@ -219,22 +215,22 @@ describe("buildSchema", () => {
 
     // pokemon_v2_pokemon ends in 'n' — heuristic treats it as an object
     const pokemon = schema.properties.data.properties.pokemon_v2_pokemon;
-    assert.equal(pokemon.type, "object");
+    expect(pokemon.type).toBe("object");
 
     const props = pokemon.properties;
-    assert.equal(props.name.type, "string");
-    assert.equal(props.base_experience.type, "integer");
-    assert.equal(props.height.type, "integer");
-    assert.equal(props.weight.type, "integer");
+    expect(props.name.type).toBe("string");
+    expect(props.base_experience.type).toBe("integer");
+    expect(props.height.type).toBe("integer");
+    expect(props.weight.type).toBe("integer");
 
     // Nested plural fields are correctly detected as arrays
     const stats = props.pokemon_v2_pokemonstats;
-    assert.equal(stats.type, "array");
-    assert.equal(stats.items.properties.base_stat.type, "integer");
-    assert.equal(stats.items.properties.effort.type, "integer");
+    expect(stats.type).toBe("array");
+    expect(stats.items.properties.base_stat.type).toBe("integer");
+    expect(stats.items.properties.effort.type).toBe("integer");
 
     const abilities = props.pokemon_v2_pokemonabilities;
-    assert.equal(abilities.type, "array");
-    assert.equal(abilities.items.properties.is_hidden.type, "boolean");
+    expect(abilities.type).toBe("array");
+    expect(abilities.items.properties.is_hidden.type).toBe("boolean");
   });
 });
