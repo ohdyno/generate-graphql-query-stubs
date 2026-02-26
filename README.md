@@ -74,4 +74,4 @@ mise exec -- go test ./...
 
 **Running commands:** Always invoke go via `mise exec -- go <args>` to ensure the correct Go version is used. Never call `go` directly.
 
-**Commit messages:** Follow [conventional commits](https://www.conventionalcommits.org/) style. Include the *why* or overall goal of the change in the message body — skip details that are already visible in the diff.
+**Commit messages:** Follow [conventional commits](https://www.conventionalcommits.org/) style. Keep messages succinct — the diff covers the details. Use the body only when the *why* isn't obvious from the diff.
