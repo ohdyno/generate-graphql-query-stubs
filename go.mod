@@ -1,4 +1,4 @@
-module exploring-agents
+module generate-graphql-query-stubs
 
 go 1.25.0
 

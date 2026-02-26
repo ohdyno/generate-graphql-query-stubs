@@ -1,4 +1,4 @@
-package jsonschemamock
+package jsonschemastub
 
 import (
 	"math"
