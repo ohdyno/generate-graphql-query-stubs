@@ -96,7 +96,7 @@ function buildSchema(querySource, overrides = {}) {
   };
 }
 
-module.exports = { buildSchema, inferType, isListField };
+module.exports = { buildSchema };
 
 if (require.main === module) {
   const args = process.argv.slice(2);
