@@ -2,7 +2,7 @@
   "name": "exploring-agents",
   "version": "1.0.0",
   "description": "",
-  "main": "graphql_schema.js",
+  "main": "src/graphql_schema.js",
   "scripts": {
     "test": "bun test"
   },

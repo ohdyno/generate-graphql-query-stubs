@@ -7,7 +7,7 @@ const {
   generateNumber,
   generateArray,
   generateObject,
-} = require("./json_schema_mock");
+} = require("../src/json_schema_mock");
 
 // ---------------------------------------------------------------------------
 // generateString

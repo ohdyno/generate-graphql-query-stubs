@@ -1,6 +1,6 @@
 const { describe, it } = require("bun:test");
 const assert = require("node:assert/strict");
-const { buildSchema, inferType, isListField } = require("./graphql_schema");
+const { buildSchema, inferType, isListField } = require("../src/graphql_schema");
 
 // ---------------------------------------------------------------------------
 // inferType
@@ -214,7 +214,7 @@ describe("buildSchema", () => {
 
   it("correctly handles the full pokemon_stats query", () => {
     const fs = require("fs");
-    const query = fs.readFileSync("pokemon_stats.graphql", "utf8");
+    const query = fs.readFileSync("tests/fixtures/pokemon_stats.graphql", "utf8");
     const schema = buildSchema(query);
 
     // pokemon_v2_pokemon ends in 'n' — heuristic treats it as an object
